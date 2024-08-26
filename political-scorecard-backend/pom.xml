@@ -15,6 +15,8 @@
 	<description>A Scorecard for Politics.  Weigh in and give your world-view, use it to better your community and assess when those in power perform their job honestly.</description>
 	<properties>
 		<java.version>19</java.version>
+		<testcontainers.version>1.19.3</testcontainers.version>
+		<spring-boot.version>3.3.2</spring-boot.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<spring-security.version>6.2.4</spring-security.version>
@@ -60,10 +62,6 @@
 		</dependency>
 		-->
 		<dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>8.0</version>
@@ -86,6 +84,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.version}</version>
 			</plugin>
 		</plugins>
 	</build>

@@ -40,7 +40,7 @@ public class NationDTO extends AbstractDTO {
 
     // Getter and Setter for homePlanet
     public PlanetDTO getHomePlanetDTO() {
-        return new PlanetDTO(homePlanet);
+        return PlanetDTO.fromPlanetEntity(homePlanet);
     }
 
     // Getter and Setter for homePlanet

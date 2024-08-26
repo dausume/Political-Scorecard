@@ -24,9 +24,9 @@ public class PlanetDeserializer extends JsonDeserializer<PlanetDTO> {
         }
 
         if (id != null) {
-            return new PlanetDTO(id, planetName);
+            return PlanetDTO.fromExistingPlanet(id, planetName);
         } else {
-            return new PlanetDTO(planetName);
+            return PlanetDTO.fromNewPlanet(planetName);
         }
     }
 }

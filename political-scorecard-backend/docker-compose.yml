@@ -1,16 +1,20 @@
 services:
-  mariadb:
-    image: mariadb:latest
-    container_name: mariadb
+  psc-mariadb:
+    image: mariadb:11.5.1-ubi-rc
+    container_name: psc-mariadb
+    env_file: .env  # Specify the .env file to use to define environment variables
     environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=your_database_name
-      - MYSQL_USER=your_username
-      - MYSQL_PASSWORD=your_password
+      - MARIADB_ROOT_PASSWORD=root_password
+      # We set the political-scorecard-backend to use the base SQL database to create the context and location databases and all others.
+      # Therefore, no need to create a default database here.
+      #- MYSQL_DATABASE=your_database_name
+      #- MYSQL_USER=root
+      #- MYSQL_PASSWORD=root_password
     ports:
-      - "3306:3306"
+      - "3800:3306"
     volumes:
       - db-data:/var/lib/mysql
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   political-scorecard-backend:
     build:
@@ -20,15 +24,37 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
+    env_file: .env  # Specify the .env file to use to define environment variables
     environment:
+      # General Spring Boot environment variables
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/your_database_name
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root_password
-      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.mariadb.jdbc.Driver
+      # Database connection environment variables for primary database
+      - SPRING_PRIMARY_DATASOURCE_DB_NAME
+      - SPRING_PRIMARY_DATASOURCE_URL
+      - SPRING_PRIMARY_DATASOURCE_USERNAME
+      - SPRING_PRIMARY_DATASOURCE_PASSWORD
+      - SPRING_PRIMARY_DATASOURCE_DRIVER_CLASS_NAME
+      # Database connection environment variables for primary database
+      - MARIADB_PSC_DATABASE_DB_NAME
+      - MARIADB_PSC_DATABASE_URL
+      - MARIADB_PSC_DATABASE_USERNAME
+      - MARIADB_PSC_DATABASE_PASSWORD
+      - MARIADB_PSC_DATABASE_DRIVER_CLASS_NAME
+      # Database connection environment variables for context database
+      - SPRING_CONTEXT_DATASOURCE_DB_NAME
+      - SPRING_CONTEXT_DATASOURCE_URL
+      - SPRING_CONTEXT_DATASOURCE_USERNAME
+      - SPRING_CONTEXT_DATASOURCE_PASSWORD
+      - SPRING_CONTEXT_DATASOURCE_DRIVER_CLASS_NAME
+      # Database connection environment variables for location database
+      - SPRING_LOCATION_DATASOURCE_DB_NAME
+      - SPRING_LOCATION_DATASOURCE_URL
+      - SPRING_LOCATION_DATASOURCE_USERNAME
+      - SPRING_LOCATION_DATASOURCE_PASSWORD
+      - SPRING_LOCATION_DATASOURCE_DRIVER_CLASS_NAME
     command: ./startup_shell/startup_shell.sh
     depends_on:
-      - mariadb
+      - psc-mariadb
 
 volumes:
   db-data:

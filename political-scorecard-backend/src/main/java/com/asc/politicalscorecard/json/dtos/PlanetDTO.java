@@ -13,27 +13,31 @@ import java.util.UUID;
 public class PlanetDTO extends AbstractDTO {
     private String planetName;
 
-    // For existing Planet Objects.
-    public PlanetDTO(String id, String planetName) {
-        System.out.println("creating DTO for pre-existing Planet object.");
+    public static PlanetDTO fromExistingPlanet(String id, String planetName) {
+        return new PlanetDTO(id, planetName);
+    }
+    
+    public static PlanetDTO fromNewPlanet(String planetName) {
+        return new PlanetDTO(planetName);
+    }
+    
+    public static PlanetDTO fromPlanetEntity(Planet planet) {
+        return new PlanetDTO(planet.getId(), planet.getPlanetName());
+    }
+
+    public PlanetDTO() {
+        // No-argument constructor
+    }
+    
+
+    private PlanetDTO(String id, String planetName) {
         super.setId(id);
         this.planetName = planetName;
     }
-
-    // For new Planet objects.
-    public PlanetDTO(String planetName) {
-        System.out.println("creating DTO for data to be turned into a new planet.");
-        // Automate creating a uuid, then set it.
+    
+    private PlanetDTO(String planetName) {
         super.setId();
         this.planetName = planetName;
-    }
-
-    // For converting planet object
-    public PlanetDTO(Planet planet) {
-        System.out.println("Converting Planet Object into a Planet DTO.");
-        // Automate creating a uuid, then set it.
-        super.setId(planet.getId());
-        this.planetName = planet.getPlanetName();
     }
 
     // Getter and Setter for planetName

@@ -1,0 +1,4 @@
+### Testing for the entire scorecard
+
+This directory is for storing the docker compose and other data, shell files, and configuration needed for a complete test of 
+the entire scorecard.

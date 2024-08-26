@@ -6,14 +6,12 @@ import javax.persistence.ManyToOne;
 
 import com.asc.politicalscorecard.services.PlanetService;
 
-@Entity
 public class Nation {
-    @Id
+
     private String id;
 
     private String nationName;
 
-    @ManyToOne
     private Planet homePlanet;
 
     

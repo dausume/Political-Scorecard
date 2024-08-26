@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Component
 @RestController
 @RequestMapping("planet")
-public class PlanetController {
+public class PlanetController 
+{
 
     @Autowired
     private PlanetService planetService;

@@ -1,26 +1,29 @@
-package com.asc.politicalscorecard.databases.tableinitializers;
+package com.asc.politicalscorecard.databases.datasourceinitializers.locationsdatasource;
+
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-@Component
+
 public class NationInitializer {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient locationjdbcClient;
 
-    public NationInitializer(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public NationInitializer(@Qualifier("locationJdbcClient") JdbcClient locationjdbcClient) {
+        this.locationjdbcClient = locationjdbcClient;
     }
 
     public void initializeTable() {
         System.out.println("In Nation InitializeTable.");
-        jdbcTemplate.execute(
+        locationjdbcClient.sql(
             "CREATE TABLE IF NOT EXISTS nation (" +
             "id VARCHAR(255) PRIMARY KEY, " +
             "nation_name VARCHAR(255) NOT NULL, " +
             "home_planet VARCHAR(255), " + // Reference to the planet object
             "FOREIGN KEY (home_planet) REFERENCES planet(id)" +
             ")"
-        );
+        ).update();
     }
 }

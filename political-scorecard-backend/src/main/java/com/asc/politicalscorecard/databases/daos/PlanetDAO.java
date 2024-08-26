@@ -1,6 +1,8 @@
 package com.asc.politicalscorecard.databases.daos;
 
 import com.asc.politicalscorecard.json.dtos.PlanetDTO;
+import com.asc.politicalscorecard.objects.Planet;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -8,20 +10,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.RowMapper;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class PlanetDAO extends AbstractDAO<PlanetDTO> {
     private static final Logger logger = Logger.getLogger(PlanetDAO.class.getName());
-    private final JdbcTemplate jdbcTemplate;
+
+    private JdbcClient jdbcClient;
 
     @Autowired
-    public PlanetDAO(JdbcTemplate jdbcTemplate) 
+    public PlanetDAO(@Qualifier("locationJdbcClient") JdbcClient jdbcClient) 
     {
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcClient = jdbcClient;
     }
 
     @Override
@@ -29,7 +36,9 @@ public class PlanetDAO extends AbstractDAO<PlanetDTO> {
         System.out.println("In create Planet in PlanetDAO");
         String query = "INSERT INTO planet (id, planet_name) VALUES (?, ?)";
         try {
-            jdbcTemplate.update(query, dto.getId(), dto.getPlanetName());
+            jdbcClient.sql(query)
+                      .params(List.of(dto.getId(), dto.getPlanetName()))
+                      .update();
             return true;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error creating planet: ", e);
@@ -42,7 +51,11 @@ public class PlanetDAO extends AbstractDAO<PlanetDTO> {
         System.out.println("Reading Planet object with id : " + id);
         String query = "SELECT * FROM planet WHERE id = ?";
         try {
-            PlanetDTO dto = jdbcTemplate.queryForObject(query, new PlanetRowMapper(), id);
+            // reimplement using jdbcClient
+            PlanetDTO dto = jdbcClient.sql(query)
+                                     .params(List.of(id))
+                                     .query(PlanetDTO.class)
+                                     .single();
             System.out.println("Got DTO List");
             System.out.println(dto);
             logger.log(Level.SEVERE, "Error: Query returned multiple Planets, should only be returning one.");
@@ -58,7 +71,10 @@ public class PlanetDAO extends AbstractDAO<PlanetDTO> {
     public List<PlanetDTO> readAll() {
         String query = "SELECT * FROM planet";
         try {
-            List<PlanetDTO> allPlanets = jdbcTemplate.query(query, new PlanetRowMapper());
+            //List<PlanetDTO> allPlanets = jdbcTemplate.query(query, new PlanetRowMapper());
+            List<PlanetDTO> allPlanets = jdbcClient.sql(query)
+                                                   .query(PlanetDTO.class)
+                                                   .list();
             return allPlanets;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error reading all planets: ", e);
@@ -70,7 +86,10 @@ public class PlanetDAO extends AbstractDAO<PlanetDTO> {
     public boolean update(PlanetDTO dto) {
         String query = "UPDATE planet SET planet_name = ? WHERE id = ?";
         try {
-            jdbcTemplate.update(query, dto.getPlanetName(), dto.getId());
+            //jdbcTemplate.update(query, dto.getPlanetName(), dto.getId());
+            jdbcClient.sql(query)
+                      .params(List.of(dto.getPlanetName(), dto.getId()))
+                      .update();
             return true;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error updating planet: ", e);
@@ -82,18 +101,14 @@ public class PlanetDAO extends AbstractDAO<PlanetDTO> {
     public boolean delete(String id) {
         String query = "DELETE FROM planet WHERE id = ?";
         try {
-            jdbcTemplate.update(query, id);
+            //jdbcTemplate.update(query, id);
+            jdbcClient.sql(query)
+                      .params(List.of(id))
+                      .update();
             return true;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error deleting planet: ", e);
             return false;
-        }
-    }
-
-    private static class PlanetRowMapper implements RowMapper<PlanetDTO> {
-        @Override
-        public PlanetDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new PlanetDTO(rs.getString("id"), rs.getString("planet_name"));
         }
     }
 }

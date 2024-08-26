@@ -1,11 +1,12 @@
 services:
-  psc-mariadb:
+  psc-mariadb-test:
     image: mariadb:11.5-rc
-    container_name: psc-mariadb
+    container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=political-scorecard
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
     ports:
       - "3306:3306"
     volumes:
@@ -26,12 +27,6 @@ services:
       # General Spring Boot environment variables
       - SPRING_PROFILES_ACTIVE=dev
       # Database connection environment variables for primary database
-      - SPRING_PRIMARY_DATASOURCE_DB_NAME
-      - SPRING_PRIMARY_DATASOURCE_URL
-      - SPRING_PRIMARY_DATASOURCE_USERNAME
-      - SPRING_PRIMARY_DATASOURCE_PASSWORD
-      - SPRING_PRIMARY_DATASOURCE_DRIVER_CLASS_NAME
-      # Database connection environment variables for primary database
       - MARIADB_PSC_DATABASE_URL
       - MARIADB_PSC_DATABASE_USERNAME
       - MARIADB_PSC_DATABASE_PASSWORD
@@ -48,7 +43,7 @@ services:
       - SPRING_LOCATION_DATASOURCE_DRIVER_CLASS_NAME
     entrypoint: ./political-scorecard-backend/startup_shell/startup_shell.sh
     depends_on:
-      - psc-mariadb
+      - mariadb
     networks:
       - app-network
 
@@ -61,15 +56,15 @@ services:
     networks:
       - app-network
 
-  keycloak:
+  keycloak-test:
     image: keycloak
     container_name: keycloak
     build:
-      context: ./keycloak
+      context: ../keycloak
     ports:
       - "8080:8080"
     volumes:
-      - keycloak_data:/opt/keycloak/data
+      - keycloak_data_test:/opt/keycloak/data
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
@@ -77,7 +72,7 @@ services:
     networks:
       - app-network
 
-  nginx:
+  nginx-test:
     image: nginx:latest
     container_name: nginx
     ports:
@@ -92,12 +87,17 @@ services:
       - app-network
 
 volumes:
-  db-data:
-  keycloak_data:
+  db-data-test:
     driver: local
     driver_opts:
       type: none
-      device: ./keycloak_data
+      device: ./scorecard-test/db-data-test
+      o: bind
+  keycloak_data_test:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./scorecard-test/keycloak_data_test
       o: bind
 
 networks:
