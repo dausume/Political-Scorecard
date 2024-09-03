@@ -12,30 +12,24 @@ public class Nation {
 
     private String nationName;
 
-    private Planet homePlanet;
-
-    
+    private String homePlanetId;
 
     public Nation() {
     }
 
-    // Note : To create a Nation using a homePlanetId, overload the createNation with a string in the parameter location of homePlanet.
-    public Nation(String id, String nationName, Planet homePlanet) {
+    // Used for existing Nation objects
+    public Nation(String id, String nationName, String homePlanetId) {
         this.id = id;
         this.nationName = nationName;
-        this.homePlanet = homePlanet;
+        this.homePlanetId = homePlanetId; 
     }
 
-    public Nation(String nationName, Planet homePlanet) {
-        this.nationName = nationName;
-        this.homePlanet = homePlanet;
-    }
-
+    // Used for new Nation objects
     //make a shallow planet with only the id, this should not be used when updating both this
     //and the planet at the same time or it will cause data loss.  Only when quickly using the id to make the connection.
     public Nation(String nationName, String homePlanetId) {
         this.nationName = nationName;
-        this.homePlanet = new Planet(id); 
+        this.homePlanetId = homePlanetId; 
     }
 
     // Getter

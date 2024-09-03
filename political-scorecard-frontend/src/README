@@ -1,8 +1,0 @@
-# Resources for figuring out react-oidc-context and/or oidc-client-ts (it's parent project) for use with keycloak.
-
-# oidc-client-ts reference projects
-# oidc client docs
-https://authts.github.io/oidc-client-ts/
-
-# react-oidc-context reference project
-https://github.com/authts/sample-keycloak-react-oidc-context/tree/main

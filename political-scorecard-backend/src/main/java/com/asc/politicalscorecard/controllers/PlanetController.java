@@ -1,11 +1,14 @@
 package com.asc.politicalscorecard.controllers;
 
-import com.asc.politicalscorecard.json.dtos.PlanetDTO;
+import com.asc.politicalscorecard.controllers.responses.ApiResponse;
+import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
+import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
 import com.asc.politicalscorecard.services.PlanetService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,12 +37,13 @@ public class PlanetController
 
     // Used to create a Single Planet Object.
     @PostMapping("create")
-    public String createPlanet(@RequestBody PlanetDTO planetDTO) {
+    public ResponseEntity<ApiResponse<PlanetDTO>> createPlanet(@RequestBody PlanetDTO planetDTO) {
         System.out.println("In create planet controller.");
-        if (planetService.createPlanet(planetDTO)) {
-            return "Planet created successfully!";
-        } else {
-            return "Failed to create planet.";
+        ApiResponse<PlanetDTO> response = planetService.createPlanet(planetDTO);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else { // Catches any unexpected errors.
+            return ResponseEntity.status(500).body(response);
         }
     }
 

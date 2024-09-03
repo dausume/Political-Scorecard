@@ -1,12 +1,12 @@
 package com.asc.politicalscorecard.databases.daos;
 
-
+import com.asc.politicalscorecard.controllers.responses.ApiResponse;
 import java.util.List;
 
 public abstract class AbstractDAO<T> {
 
     // Create operation
-    public abstract boolean create(T dto);
+    public abstract ApiResponse<T> create(T dto);
 
     // Read operation
     public abstract T read(String id);

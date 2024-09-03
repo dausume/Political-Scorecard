@@ -1,27 +1,30 @@
 services:
   psc-mariadb:
-    image: mariadb:11.5-rc
+    image: mariadb:11.5.1-ubi-rc
     container_name: psc-mariadb
+    env_file: ./political-scorecard-backend/.env  # Specify the .env file to use to define environment variables
     environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=root_password
+      # We set the political-scorecard-backend to use the base SQL database to create the context and location databases and all others.
+      # Therefore, no need to create a default database here.
+      #- MYSQL_DATABASE=your_database_name
+      #- MYSQL_USER=root
+      #- MYSQL_PASSWORD=root_password
     ports:
-      - "3306:3306"
+      - "3800:3306"
     volumes:
       - db-data:/var/lib/mysql
-    networks:
-      - app-network
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   political-scorecard-backend:
     build:
       context: ./political-scorecard-backend
-    container_name: political-scorecard-backend
+      dockerfile: Dockerfile
     ports:
-      - "8081:8080" # Map external port 8081 to internal port 8080
+      - "8080:8080"
     volumes:
       - .:/app
-    env_file: ./political-scorecard-backend/.env
+    env_file: ./political-scorecard-backend/.env  # Specify the .env file to use to define environment variables
     environment:
       # General Spring Boot environment variables
       - SPRING_PROFILES_ACTIVE=dev
@@ -32,25 +35,28 @@ services:
       - SPRING_PRIMARY_DATASOURCE_PASSWORD
       - SPRING_PRIMARY_DATASOURCE_DRIVER_CLASS_NAME
       # Database connection environment variables for primary database
+      - MARIADB_PSC_DATABASE_DB_NAME
       - MARIADB_PSC_DATABASE_URL
       - MARIADB_PSC_DATABASE_USERNAME
       - MARIADB_PSC_DATABASE_PASSWORD
       - MARIADB_PSC_DATABASE_DRIVER_CLASS_NAME
       # Database connection environment variables for context database
+      - SPRING_CONTEXT_DATASOURCE_DB_NAME
       - SPRING_CONTEXT_DATASOURCE_URL
       - SPRING_CONTEXT_DATASOURCE_USERNAME
       - SPRING_CONTEXT_DATASOURCE_PASSWORD
       - SPRING_CONTEXT_DATASOURCE_DRIVER_CLASS_NAME
       # Database connection environment variables for location database
+      - SPRING_LOCATION_DATASOURCE_DB_NAME
       - SPRING_LOCATION_DATASOURCE_URL
       - SPRING_LOCATION_DATASOURCE_USERNAME
       - SPRING_LOCATION_DATASOURCE_PASSWORD
       - SPRING_LOCATION_DATASOURCE_DRIVER_CLASS_NAME
-    entrypoint: ./political-scorecard-backend/startup_shell/startup_shell.sh
+    command: .startup_shell/backend_startup_shell.sh
     depends_on:
       - psc-mariadb
     networks:
-      - app-network
+      - psc-network
 
   political-scorecard-frontend:
     build:
@@ -59,7 +65,7 @@ services:
     ports:
       - "7000:7000" # Map external port 7000 to internal port 7000
     networks:
-      - app-network
+      - psc-network
 
   keycloak:
     image: keycloak
@@ -67,7 +73,7 @@ services:
     build:
       context: ./keycloak
     ports:
-      - "8080:8080"
+      - "2337:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
     environment:
@@ -75,7 +81,7 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
     command: ["start-dev"]
     networks:
-      - app-network
+      - psc-network
 
   nginx:
     image: nginx:latest
@@ -89,7 +95,7 @@ services:
       - political-scorecard-frontend
       - keycloak
     networks:
-      - app-network
+      - psc-network
 
 volumes:
   db-data:
@@ -101,5 +107,5 @@ volumes:
       o: bind
 
 networks:
-  app-network:
+  psc-network:
     driver: bridge

@@ -1,7 +1,9 @@
 package com.asc.politicalscorecard.services;
 
-import com.asc.politicalscorecard.databases.daos.PlanetDAO;
-import com.asc.politicalscorecard.json.dtos.PlanetDTO;
+import com.asc.politicalscorecard.controllers.responses.ApiResponse;
+import com.asc.politicalscorecard.databases.daos.planetdaos.PlanetDAO;
+import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class PlanetService {
         this.planetDAO = planetDAO;
     }
 
-    public boolean createPlanet(PlanetDTO planet) {
+    public ApiResponse<PlanetDTO> createPlanet(PlanetDTO planet) {
         return planetDAO.create(planet);
     }
 

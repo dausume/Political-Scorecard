@@ -1,6 +1,6 @@
 package com.asc.politicalscorecard.json.serializer;
 
-import com.asc.politicalscorecard.json.dtos.PlanetDTO;
+import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

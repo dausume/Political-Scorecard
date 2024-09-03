@@ -2,8 +2,6 @@ package com.asc.politicalscorecard.databases.datasourceinitializers.locationsdat
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 
