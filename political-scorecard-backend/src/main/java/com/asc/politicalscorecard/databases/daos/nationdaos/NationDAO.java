@@ -6,7 +6,7 @@ import com.asc.politicalscorecard.databases.daos.planetdaos.PlanetDAO;
 import com.asc.politicalscorecard.exceptions.apiuserexceptions.InvalidInputException;
 import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
 import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Planet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

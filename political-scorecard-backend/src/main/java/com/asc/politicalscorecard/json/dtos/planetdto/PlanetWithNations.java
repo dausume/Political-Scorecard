@@ -2,7 +2,7 @@ package com.asc.politicalscorecard.json.dtos.planetdto;
 import java.util.List;
 
 import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Planet;
 
 public class PlanetWithNations extends PlanetDTO {
     private String planetName;

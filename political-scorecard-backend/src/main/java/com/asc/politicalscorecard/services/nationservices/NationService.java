@@ -3,7 +3,8 @@ package com.asc.politicalscorecard.services.nationservices;
 import com.asc.politicalscorecard.controllers.responses.ApiResponse;
 import com.asc.politicalscorecard.databases.daos.nationdaos.NationDAO;
 import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
-import com.asc.politicalscorecard.objects.Nation;
+import com.asc.politicalscorecard.objects.location.Nation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

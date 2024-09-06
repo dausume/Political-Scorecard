@@ -1,7 +1,7 @@
 package com.asc.politicalscorecard.json.deserializer.nationdeserializers;
 
 import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Planet;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;

@@ -16,6 +16,17 @@ services:
       - db-data:/var/lib/mysql
       - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  psc-backend-couchdb:
+    image: couchdb:3.3.3
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=YOURPASSWORD
+    volumes:
+        - ./couchdb/dbdata:/opt/couchdb/data
+
   political-scorecard-backend:
     build:
       context: .
@@ -55,6 +66,7 @@ services:
     command: ./startup_shell/startup_shell.sh
     depends_on:
       - psc-mariadb
+      - psc-backend-couchdb
 
 volumes:
   db-data:

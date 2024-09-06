@@ -4,7 +4,7 @@ import com.asc.politicalscorecard.controllers.responses.ApiResponse;
 import com.asc.politicalscorecard.databases.daos.AbstractDAO;
 import com.asc.politicalscorecard.json.dtos.nationdto.NationDTO;
 import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Planet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

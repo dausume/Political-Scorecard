@@ -4,8 +4,8 @@ import com.asc.politicalscorecard.json.deserializer.nationdeserializers.NationDe
 import com.asc.politicalscorecard.json.dtos.AbstractDTO;
 import com.asc.politicalscorecard.json.dtos.planetdto.PlanetDTO;
 import com.asc.politicalscorecard.json.serializer.nationserializers.NationSerializer;
-import com.asc.politicalscorecard.objects.Nation;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Nation;
+import com.asc.politicalscorecard.objects.location.Planet;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

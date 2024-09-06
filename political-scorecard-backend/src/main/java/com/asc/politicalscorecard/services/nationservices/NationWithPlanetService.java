@@ -4,8 +4,6 @@ import com.asc.politicalscorecard.databases.daos.nationdaos.NationWithPlanetDAO;
 import com.asc.politicalscorecard.json.dtos.nationdto.NationWithPlanetDTO;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 public class NationWithPlanetService {
 

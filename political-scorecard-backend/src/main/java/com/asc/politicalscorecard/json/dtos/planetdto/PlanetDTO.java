@@ -3,7 +3,7 @@ package com.asc.politicalscorecard.json.dtos.planetdto;
 import com.asc.politicalscorecard.json.deserializer.PlanetDeserializer;
 import com.asc.politicalscorecard.json.dtos.AbstractDTO;
 import com.asc.politicalscorecard.json.serializer.PlanetSerializer;
-import com.asc.politicalscorecard.objects.Planet;
+import com.asc.politicalscorecard.objects.location.Planet;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
