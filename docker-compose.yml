@@ -7,9 +7,6 @@ services:
       - MARIADB_ROOT_PASSWORD=root_password
       # We set the political-scorecard-backend to use the base SQL database to create the context and location databases and all others.
       # Therefore, no need to create a default database here.
-      #- MYSQL_DATABASE=your_database_name
-      #- MYSQL_USER=root
-      #- MYSQL_PASSWORD=root_password
     ports:
       - "3800:3306"
     volumes:
